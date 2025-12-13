@@ -54,7 +54,7 @@ export const StudentProvider = ({ children }) => {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        "/add-student",
+        `/add-student`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
