@@ -45,35 +45,39 @@ export const StudentProvider = ({ children }) => {
     fetchStudents();
   }, []);
 
-  // =====================
-  // ADD STUDENT
-  // =====================
-  const addStudent = async (student) => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
+import API from "../api/api";
 
-      const res = await axios.post(
-        `/api/admin/add-student`,
-        student,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+const addStudent = async (student) => {
+  try {
+    setLoading(true);
 
-      if (res.data?.student) {
-        setStudents((prev) => [...prev, res.data.student]);
-      } else {
-        fetchStudents();
+    const token = localStorage.getItem("token");
+
+    const res = await API.post(
+      "/api/admin/add-student",
+      student,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
+    );
 
-      toast.success("Student added successfully 🎉");
-    } catch (error) {
-      toast.error("Failed to add student");
-      throw error;
-    } finally {
-      setLoading(false);
+    if (res.data?.student) {
+      setStudents((prev) => [...prev, res.data.student]);
+    } else {
+      await fetchStudents();
     }
-  };
 
+    toast.success("Student added successfully 🎉");
+  } catch (error) {
+    console.error("ADD STUDENT ERROR:", error.response?.data || error.message);
+    toast.error(error.response?.data?.message || "Failed to add student");
+    throw error;
+  } finally {
+    setLoading(false);
+  }
+};
   // =====================
   // UPDATE STUDENT
   // =====================
