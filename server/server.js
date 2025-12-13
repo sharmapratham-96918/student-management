@@ -11,6 +11,12 @@ connectDB();
 
 const app = express();
 
+app.get("/" , (req,res) => {
+    res.json({
+        message :"WELLCOM TO STUDENT APIS"
+    })
+})
+
 // Middleware
 app.use(cors());
 app.use(express.json());
