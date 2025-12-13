@@ -58,17 +58,6 @@ const StudentTable = ({ setShowForm, setFormMode }) => {
                   View
                 </button>
 
-                {/* Edit */}
-                <button
-                  onClick={() => {
-                    fetchSingleStudent(s._id);
-                    setFormMode("edit");
-                    setShowForm(true);
-                  }}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded"
-                >
-                  Edit
-                </button>
 
                 {/* Delete */}
                 <button
