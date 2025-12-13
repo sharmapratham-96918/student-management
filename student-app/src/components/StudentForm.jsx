@@ -13,32 +13,33 @@ const emptyStudent = {
 };
 
 const StudentForm = ({ mode = "create", close }) => {
-  const { selectedStudent, createStudent, updateStudent } = useStudent();
+  const { selectedStudent, addStudent, updateStudent } = useStudent();
   const [formData, setFormData] = useState(emptyStudent);
 
   // ======================
-  // Prefill on Edit
+  // Prefill form on Edit
   // ======================
   useEffect(() => {
     if (mode === "edit" && selectedStudent?._id) {
       setFormData({
-        name: selectedStudent.name || "",
-        fatherName: selectedStudent.fatherName || "",
-        motherName: selectedStudent.motherName || "",
-        rollNumber: selectedStudent.rollNumber || "",
-        address: selectedStudent.address || "",
-        class: selectedStudent.class || "",
-        subjects: selectedStudent.subjects?.join(", ") || "",
+        name: selectedStudent.name ?? "",
+        fatherName: selectedStudent.fatherName ?? "",
+        motherName: selectedStudent.motherName ?? "",
+        rollNumber: selectedStudent.rollNumber ?? "",
+        address: selectedStudent.address ?? "",
+        class: selectedStudent.class ?? "",
+        subjects: selectedStudent.subjects?.join(", ") ?? "",
         isActive: selectedStudent.isActive ?? true,
       });
     }
   }, [mode, selectedStudent]);
 
   // ======================
-  // Change Handler
+  // Input change handler
   // ======================
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -46,17 +47,17 @@ const StudentForm = ({ mode = "create", close }) => {
   };
 
   // ======================
-  // Submit
+  // Submit handler
   // ======================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const payload = {
-      name: formData.name,
-      fatherName: formData.fatherName,
-      motherName: formData.motherName,
+      name: formData.name.trim(),
+      fatherName: formData.fatherName.trim(),
+      motherName: formData.motherName.trim(),
       rollNumber: Number(formData.rollNumber),
-      address: formData.address,
+      address: formData.address.trim(),
       class: Number(formData.class),
       subjects: formData.subjects
         .split(",")
@@ -69,7 +70,7 @@ const StudentForm = ({ mode = "create", close }) => {
 
     try {
       if (mode === "create") {
-        await createStudent(payload);
+        await addStudent(payload);
       } else {
         if (!selectedStudent?._id) {
           alert("Student not loaded yet. Please try again.");
@@ -78,14 +79,15 @@ const StudentForm = ({ mode = "create", close }) => {
         await updateStudent(selectedStudent._id, payload);
       }
 
-      close(); // close only on success
-    } catch (err) {
+      close(); // close modal on success
+    } catch (error) {
+      console.error(error);
       alert("Failed to save student. Check console.");
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <form
         onSubmit={handleSubmit}
         className="bg-white dark:bg-gray-900 p-6 rounded-xl w-full max-w-lg space-y-3"
