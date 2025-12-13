@@ -12,7 +12,6 @@ export const StudentProvider = ({ children }) => {
   const [view, setView] = useState("table");
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  const BASE_URL = "http://localhost:4000/api/admin";
 
   // =====================
   // GET ALL STUDENTS (FIXED: TOKEN ADDED)
@@ -22,7 +21,7 @@ export const StudentProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(`${BASE_URL}/students`, {
+      const res = await axios.get(`/students`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,7 +54,7 @@ export const StudentProvider = ({ children }) => {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        `${BASE_URL}/add-student`,
+        `/add-student`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -84,7 +83,7 @@ export const StudentProvider = ({ children }) => {
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        `${BASE_URL}/update-student/${id}`,
+        `/update-student/${id}`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -114,7 +113,7 @@ export const StudentProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      await axios.delete(`${BASE_URL}/delete-student/${id}`, {
+      await axios.delete(`/delete-student/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
