@@ -21,7 +21,7 @@ export const StudentProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(`/students`, {
+      const res = await axios.get(`api/admin/students`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,7 +54,7 @@ export const StudentProvider = ({ children }) => {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        `/add-student`,
+        `/api/admin/add-student`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -83,7 +83,7 @@ export const StudentProvider = ({ children }) => {
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        `/update-student/${id}`,
+        `/api/admin/update-student/${id}`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -113,7 +113,7 @@ export const StudentProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      await axios.delete(`/delete-student/${id}`, {
+      await axios.delete(`/api/admin/delete-student/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
