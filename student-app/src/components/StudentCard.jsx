@@ -39,8 +39,18 @@ const StudentCard = ({ student, setShowForm, setFormMode }) => {
 
       {/* Action Buttons */}
       <div className="flex gap-2 mt-4">
-    
-    
+        {/* Edit */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            fetchSingleStudent(student._id);
+            setFormMode("edit");
+            setShowForm(true);
+          }}
+          className="flex-1 text-sm px-3 py-1 bg-yellow-500 text-white rounded"
+        >
+          Edit
+        </button>
 
         {/* Delete */}
         <button

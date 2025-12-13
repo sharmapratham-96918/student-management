@@ -46,7 +46,7 @@ export const StudentProvider = ({ children }) => {
   }, []);
 
 
-const addStudent = async (student) => {
+const addStudent = async (students) => {
   try {
     setLoading(true);
 
@@ -54,7 +54,7 @@ const addStudent = async (student) => {
 
     const res = await API.post(
       "/api/admin/add-student",
-      student,
+      students,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -62,8 +62,8 @@ const addStudent = async (student) => {
       }
     );
 
-    if (res.data?.student) {
-      setStudents((prev) => [...prev, res.data.student]);
+    if (res.data?.students) {
+      setStudents((prev) => [...prev, res.data.students]);
     } else {
       await fetchStudents();
     }
@@ -80,7 +80,7 @@ const addStudent = async (student) => {
   // =====================
   // UPDATE STUDENT
   // =====================
-  const updateStudent = async (id, student) => {
+  const updateStudent = async (id, students) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -91,9 +91,9 @@ const addStudent = async (student) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (res.data?.student) {
+      if (res.data?.students) {
         setStudents((prev) =>
-          prev.map((s) => (s._id === id ? res.data.student : s))
+          prev.map((s) => (s._id === id ? res.data.students : s))
         );
       } else {
         fetchStudents();
