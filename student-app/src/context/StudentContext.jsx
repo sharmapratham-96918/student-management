@@ -45,7 +45,6 @@ export const StudentProvider = ({ children }) => {
     fetchStudents();
   }, []);
 
-import API from "../api/api";
 
 const addStudent = async (student) => {
   try {
