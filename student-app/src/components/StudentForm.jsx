@@ -92,7 +92,7 @@ const StudentForm = ({ mode = "create", close }) => {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-900 p-6 rounded-xl w-full max-w-lg space-y-3"
+        className="bg-white dark:bg-gray-200 p-6 rounded-xl w-full max-w-lg space-y-3"
       >
         <h2 className="text-xl font-bold">
           {mode === "create" ? "Add Student" : "Edit Student"}
