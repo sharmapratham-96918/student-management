@@ -4,6 +4,7 @@ const StudentTable = ({ setShowForm, setFormMode }) => {
   const {
     students,
     fetchSingleStudent,
+    prepareEditStudent,
     deleteStudent,
     updateStudent,
   } = useStudent();
@@ -17,7 +18,7 @@ const StudentTable = ({ setShowForm, setFormMode }) => {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow">
+      <table className="min-w-full bg-white rounded-lg shadow">
         <thead>
           <tr className="text-left text-sm">
             <th className="p-3">Name</th>
@@ -31,17 +32,23 @@ const StudentTable = ({ setShowForm, setFormMode }) => {
 
         <tbody>
           {students.map((s) => (
-            <tr key={s._id} className="border-t">
-              <td className="p-3">{s.name}</td>
+            <tr
+              key={s._id}
+              className="border-t hover:bg-purple-50 transition"
+              onClick={() => fetchSingleStudent(s._id)}
+            >
+              <td className="p-3 font-medium">{s.name}</td>
               <td className="p-3">{s.rollNumber}</td>
               <td className="p-3">{s.class}</td>
               <td className="p-3">{s.subjects.join(", ")}</td>
 
-              {/* Active Toggle */}
               <td className="p-3">
                 <button
-                  onClick={() => toggleActive(s)}
-                  className={`px-3 py-1 rounded text-white text-sm ${
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleActive(s);
+                  }}
+                  className={`px-3 py-1 rounded text-white ${
                     s.isActive ? "bg-green-600" : "bg-gray-500"
                   }`}
                 >
@@ -50,29 +57,22 @@ const StudentTable = ({ setShowForm, setFormMode }) => {
               </td>
 
               <td className="p-3 space-x-2">
-                {/* View */}
                 <button
-                  onClick={() => fetchSingleStudent(s._id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    fetchSingleStudent(s._id);
+                  }}
                   className="px-3 py-1 bg-blue-600 text-white rounded"
                 >
                   View
                 </button>
 
-                {/* Edit */}
-                <button
-                  onClick={() => {
-                    fetchSingleStudent(s._id);
-                    setFormMode("edit");
-                    setShowForm(true);
-                  }}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded"
-                >
-                  Edit
-                </button>
 
-                {/* Delete */}
                 <button
-                  onClick={() => deleteStudent(s._id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteStudent(s._id);
+                  }}
                   className="px-3 py-1 bg-red-600 text-white rounded"
                 >
                   Delete

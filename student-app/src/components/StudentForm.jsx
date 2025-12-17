@@ -17,7 +17,7 @@ const StudentForm = ({ mode = "create", close }) => {
   const [formData, setFormData] = useState(emptyStudent);
 
   // ======================
-  // Prefill form on Edit
+  // Sync form for CREATE & EDIT
   // ======================
   useEffect(() => {
     if (mode === "edit" && selectedStudent?._id) {
@@ -31,6 +31,10 @@ const StudentForm = ({ mode = "create", close }) => {
         subjects: selectedStudent.subjects?.join(", ") ?? "",
         isActive: selectedStudent.isActive ?? true,
       });
+    }
+
+    if (mode === "create") {
+      setFormData(emptyStudent); // 🔥 RESET FORM
     }
   }, [mode, selectedStudent]);
 
@@ -66,14 +70,12 @@ const StudentForm = ({ mode = "create", close }) => {
       isActive: formData.isActive,
     };
 
-    console.log("SUBMIT PAYLOAD 👉", payload);
-
     try {
       if (mode === "create") {
         await addStudent(payload);
       } else {
         if (!selectedStudent?._id) {
-          alert("Student not loaded yet. Please try again.");
+          alert("Student not loaded yet.");
           return;
         }
         await updateStudent(selectedStudent._id, payload);
@@ -82,7 +84,7 @@ const StudentForm = ({ mode = "create", close }) => {
       close(); // close modal on success
     } catch (error) {
       console.error(error);
-      alert("Failed to save student. Check console.");
+      alert("Failed to save student.");
     }
   };
 
@@ -96,24 +98,58 @@ const StudentForm = ({ mode = "create", close }) => {
           {mode === "create" ? "Add Student" : "Edit Student"}
         </h2>
 
-        {[
-          ["name", "Name"],
-          ["fatherName", "Father Name"],
-          ["motherName", "Mother Name"],
-          ["rollNumber", "Roll Number"],
-          ["class", "Class"],
-          ["address", "Address"],
-        ].map(([key, label]) => (
-          <input
-            key={key}
-            name={key}
-            placeholder={label}
-            value={formData[key]}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        ))}
+        <input
+          name="name"
+          placeholder="Name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+
+        <input
+          name="fatherName"
+          placeholder="Father Name"
+          value={formData.fatherName}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+
+        <input
+          name="motherName"
+          placeholder="Mother Name"
+          value={formData.motherName}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+
+        <input
+          type="number"
+          name="rollNumber"
+          placeholder="Roll Number"
+          value={formData.rollNumber}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+
+        <input
+          type="number"
+          name="class"
+          placeholder="Class"
+          value={formData.class}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+
+        <input
+          name="address"
+          placeholder="Address"
+          value={formData.address}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
 
         <input
           name="subjects"

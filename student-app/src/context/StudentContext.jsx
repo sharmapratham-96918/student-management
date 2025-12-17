@@ -12,6 +12,7 @@ export const StudentProvider = ({ children }) => {
   const [view, setView] = useState("table");
   const [selectedStudent, setSelectedStudent] = useState(null);
 
+  const BASE_URL = "/";
 
   // =====================
   // GET ALL STUDENTS (FIXED: TOKEN ADDED)
@@ -21,7 +22,7 @@ export const StudentProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(`api/admin/students`, {
+      const res = await axios.get(`/students`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -45,55 +46,76 @@ export const StudentProvider = ({ children }) => {
     fetchStudents();
   }, []);
 
-
-const addStudent = async (students) => {
+// =====================
+// GET SINGLE STUDENT
+// =====================
+const fetchSingleStudent = async (id) => {
   try {
     setLoading(true);
-
     const token = localStorage.getItem("token");
 
-    const res = await API.post(
-      "/api/admin/add-student",
-      students,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await axios.get(`/student/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    if (res.data?.students) {
-      setStudents((prev) => [...prev, res.data.students]);
-    } else {
-      await fetchStudents();
-    }
-
-    toast.success("Student added successfully 🎉");
-  } catch (error) {
-    console.error("ADD STUDENT ERROR:", error.response?.data || error.message);
-    toast.error(error.response?.data?.message || "Failed to add student");
-    throw error;
+    setSelectedStudent(res.data) 
+    setView("detail");              
+  } catch (error) {   
+    toast.error("Failed to load student details");
   } finally {
     setLoading(false);
   }
 };
+
+
+  // =====================
+  // ADD STUDENT
+  // =====================
+  const addStudent = async (student) => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+
+      const res = await axios.post(
+        `/add-student`,
+        student,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (res.data?.student) {
+        setStudents((prev) => [...prev, res.data.student]);
+      } else {
+        fetchStudents();
+      }
+
+      toast.success("Student added successfully 🎉");
+    } catch (error) {
+      toast.error("Failed to add student");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // =====================
   // UPDATE STUDENT
   // =====================
-  const updateStudent = async (id, students) => {
+  const updateStudent = async (id, student) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        `/api/admin/update-student/${id}`,
+        `/update-student/${id}`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (res.data?.students) {
+      if (res.data?.student) {
         setStudents((prev) =>
-          prev.map((s) => (s._id === id ? res.data.students : s))
+          prev.map((s) => (s._id === id ? res.data.student : s))
         );
       } else {
         fetchStudents();
@@ -108,15 +130,12 @@ const addStudent = async (students) => {
     }
   };
 
-  // =====================
-  // DELETE STUDENT
-  // =====================
   const deleteStudent = async (id) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      await axios.delete(`/api/admin/delete-student/${id}`, {
+      await axios.delete(`/delete-student/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -143,6 +162,7 @@ const addStudent = async (students) => {
         setSelectedStudent,
 
         fetchStudents,
+        fetchSingleStudent,
         addStudent,
         updateStudent,
         deleteStudent,
