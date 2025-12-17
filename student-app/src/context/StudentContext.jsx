@@ -12,6 +12,7 @@ export const StudentProvider = ({ children }) => {
   const [view, setView] = useState("table");
   const [selectedStudent, setSelectedStudent] = useState(null);
 
+  const BASE_URL = "http://localhost:4000/api/admin";
 
   // =====================
   // GET ALL STUDENTS (FIXED: TOKEN ADDED)
@@ -21,7 +22,7 @@ export const StudentProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(`/students`, {
+      const res = await axios.get(`${BASE_URL}/students`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -53,13 +54,13 @@ const fetchSingleStudent = async (id) => {
     setLoading(true);
     const token = localStorage.getItem("token");
 
-    const res = await axios.get(`/student/${id}`, {
+    const res = await axios.get(`${BASE_URL}/student/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    setSelectedStudent(res.data) 
+    setSelectedStudent(res.data);
     setView("detail");              
   } catch (error) {   
     toast.error("Failed to load student details");
@@ -78,7 +79,7 @@ const fetchSingleStudent = async (id) => {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        `/add-student`,
+        `${BASE_URL}/add-student`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -107,7 +108,7 @@ const fetchSingleStudent = async (id) => {
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        `/update-student/${id}`,
+        `${BASE_URL}/update-student/${id}`,
         student,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -134,7 +135,7 @@ const fetchSingleStudent = async (id) => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      await axios.delete(`/delete-student/${id}`, {
+      await axios.delete(`${BASE_URL}/delete-student/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
