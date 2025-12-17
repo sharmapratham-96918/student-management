@@ -12,7 +12,6 @@ export const StudentProvider = ({ children }) => {
   const [view, setView] = useState("table");
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  const BASE_URL = "/";
 
   // =====================
   // GET ALL STUDENTS (FIXED: TOKEN ADDED)
